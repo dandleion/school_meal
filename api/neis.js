@@ -15,7 +15,9 @@ export async function GET(request) {
   const key = (process.env.NEIS_API_KEY || '').trim();
   if (!key) return issue('Vercel 설정에 NEIS_API_KEY가 없습니다. Settings → Environment Variables에서 등록하고 다시 배포하세요.', 503, 'MISSING_KEY');
   const target = new URL(`https://open.neis.go.kr/hub/${endpoint}`);
-  target.searchParams.set('KEY', key);
+  // TEMPORARY DIAGNOSTIC: schoolInfo only without KEY (NEIS sample access).
+  // Restore KEY for schoolInfo after investigating; public sample is limited.
+  if (endpoint !== 'schoolInfo') target.searchParams.set('KEY', key);
   target.searchParams.set('Type', 'json');
   target.searchParams.set('pIndex', '1');
   target.searchParams.set('pSize', '1000');
